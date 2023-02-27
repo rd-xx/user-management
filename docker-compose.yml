@@ -11,3 +11,28 @@ services:
     volumes:
       - './user-management-frontend:/app'
       - '/app/node_modules'
+
+  back:
+    container_name: 'um_back'
+    build:
+      context: './user-management-backend'
+    env_file:
+      - '.env'
+    ports:
+      - '4000:4000'
+    volumes:
+      - './user-management-backend:/app'
+      - '/app/node_modules'
+
+  db:
+    container_name: um_db
+    image: postgres:15-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=$DB_USERNAME
+      - POSTGRES_PASSWORD=$DB_PASSWORD
+      - POSTGRES_DB=$DB_NAME
+    ports:
+      - '5432:5432'
+    volumes:
+      - ./pg-data:/var/lib/postgresql/data
